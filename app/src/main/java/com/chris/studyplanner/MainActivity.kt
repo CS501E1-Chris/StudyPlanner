@@ -20,8 +20,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             StudyPlannerTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
+                    FocusPlanRoute(
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -30,18 +29,11 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     StudyPlannerTheme {
-        Greeting("Android")
+        FocusPlanRoute()
     }
 }

@@ -1,0 +1,119 @@
+package com.chris.studyplanner
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+
+fun durationCategory(minutes: Int): String{
+
+
+    return TODO("Provide the return value")
+}
+
+fun recommendedBreak(minutes: Int): Int{
+    return 0
+}
+
+
+
+@Composable
+fun FocusPlanRoute(
+    modifier: Modifier = Modifier
+)
+{
+    var subject by rememberSaveable {mutableStateOf("")}
+    var minutesInput by rememberSaveable {mutableStateOf("")}
+    //making focus plan nullable type
+    var plan by rememberSaveable {mutableStateOf<FocusPlan?>(null)}
+
+    val minutes = minutesInput.toIntOrNull()
+    val canCreatePlan =
+        subject.isNotBlank() &&
+                minutes != null &&
+                minutes in 10..180
+
+//    if(canCreatePlan)
+//    {
+//        FocusPlan
+//
+//    }
+
+    FocusPlanScreen(subject,
+        minutesInput,
+        plan,
+        //callback parameters to enable state hoisting
+        onSubjectChange = { Val ->
+            subject = Val
+            plan = null
+        },
+        onMinutesChange = { minVal ->
+            minutesInput = minVal
+            plan = null
+        },
+        canCreatePlan,
+        onCreatePlan = {
+            //check if create plan is valid
+            if (canCreatePlan)
+            {
+             //create a new plan
+             plan = FocusPlan(
+                 subject = subject.trim(),
+                 minutes = minutes,
+                 category = durationCategory(minutes),
+                 breakMinutes = recommendedBreak(minutes)
+             )
+            }
+        },
+        modifier
+        )
+}
+
+@Composable
+fun FocusPlanScreen(
+    subject: String,
+    minutesInput: String,
+    plan: FocusPlan?,
+    onSubjectChange: (String) -> Unit,
+    onMinutesChange: (String) -> Unit,
+    canCreatePlan: Boolean,
+    onCreatePlan: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = Modifier
+            //fill the maximum with the screen
+            .fillMaxSize()
+            //padding included so it does not get placed near the edges of the screen
+            .padding(24.dp)
+            //since the user and display text field was getting cut off because of the dimensions
+            .verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.Top)
+    {
+        Text(
+            text = stringResource(R.string.app_name),
+            style = MaterialTheme.typography.bodyLarge,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth()
+        )
+        Text(
+            text = stringResource(R.string.app_desc),
+            style = MaterialTheme.typography.bodyMedium,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
+}

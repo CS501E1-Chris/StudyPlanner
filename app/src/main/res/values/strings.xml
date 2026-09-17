@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">StudyPlanner</string>
+    <string name="app_name">Focus</string>
+    <string name="app_desc">All you have to do is enter the desired subject of study and time duration and let Focus build a plan for you</string>
 </resources>
