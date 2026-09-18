@@ -12,10 +12,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -24,9 +28,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.chris.studyplanner.ui.theme.DarkSurface
+import com.chris.studyplanner.ui.theme.OutlineCoral
 
 fun durationCategory(minutes: Int): String{
 
@@ -147,6 +155,11 @@ fun FocusPlanScreen(
                 value = subject,
                 onValueChange = onSubjectChange,
                 label = {Text("Subject")},
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,      // coral when focused
+                    unfocusedBorderColor = MaterialTheme.colorScheme.onSurfaceVariant,                    focusedLabelColor = MaterialTheme.colorScheme.primary,
+                    cursorColor = MaterialTheme.colorScheme.primary
+                ),
                 textStyle = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier
                     .width(250.dp)
@@ -159,6 +172,11 @@ fun FocusPlanScreen(
                 value = minutesInput,
                 onValueChange = onMinutesChange,
                 label = {Text("Duration")},
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,      // coral when focused
+                    unfocusedBorderColor = MaterialTheme.colorScheme.onSurfaceVariant,                    focusedLabelColor = MaterialTheme.colorScheme.primary,
+                    cursorColor = MaterialTheme.colorScheme.primary
+                ),
                 textStyle = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier
                     .width(250.dp)
@@ -171,7 +189,14 @@ fun FocusPlanScreen(
                 onClick = onCreatePlan,
                 //button is enabled if canCreatePlan is true
                 enabled = canCreatePlan,
-                modifier = Modifier.align(Alignment.CenterHorizontally),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,          // CoralAccent
+                    contentColor = MaterialTheme.colorScheme.onPrimary,          // TextOnAccent
+                    disabledContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
+                    disabledContentColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.5f)
+                ),
+                modifier = Modifier.fillMaxWidth(0.9f)
+                    .align(Alignment.CenterHorizontally),
             )
                 {
                     Text (
@@ -192,7 +217,9 @@ fun FocusPlanScreen(
         if (plan != null)
         {
             Card(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.outlinedCardColors(
+                    containerColor = MaterialTheme.colorScheme.surface)
             )
             {
                 Spacer(Modifier.height(25.dp))
@@ -200,7 +227,8 @@ fun FocusPlanScreen(
                 //subject, duration, category, break
                 Text(
                     text = "Your Study Plan",
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
                 Spacer(Modifier.height(5.dp))
@@ -211,43 +239,64 @@ fun FocusPlanScreen(
 
                 Spacer(Modifier.height(15.dp))
 
-                OutlinedCard()
+                OutlinedCard(
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant)
+                )
                 {
                     Text(
-                        text = "Duration: ${plan.minutes}",
-                        style = MaterialTheme.typography.bodySmall
+                        text = "Duration: ${plan.minutes} minutes",
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.padding(16.dp)
                     )
                 }
 
                 Spacer(Modifier.height(10.dp))
 
-                OutlinedCard()
+                OutlinedCard(
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant)
+                )
                 {
                     Text(
                         text = "Category: ${plan.category}",
-                        style = MaterialTheme.typography.bodySmall
-
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.padding(16.dp)
                     )
                 }
 
                 Spacer(Modifier.height(16.dp))
 
-                Text("Recommended Break")
+                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant, thickness = 1.dp,
+                    modifier = Modifier.fillMaxWidth(0.7f)
+                    .align(Alignment.CenterHorizontally))
+
+                Spacer(Modifier.height(15.dp))
+
+                Text(
+                    text = "RECOMMENDED BREAK",
+                    style = MaterialTheme.typography.bodySmall
+                )
                 Text(
                     text = "${plan.breakMinutes} minutes after session",
-                    style = MaterialTheme.typography.bodySmall
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Bold
                 )
                 Spacer(Modifier.height(25.dp))
 
                 OutlinedCard(
                     modifier = Modifier.fillMaxWidth(0.9f)
                         .align(Alignment.CenterHorizontally),
-                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
+                    border = BorderStroke(1.dp, OutlineCoral),
+                    colors = CardDefaults.outlinedCardColors(
+                        containerColor = DarkSurface
+                    ),
                 )
                 {
                     Text(
                     text = "Study ${plan.subject} for ${plan.minutes} minutes, then take a ${plan.breakMinutes} minute break! Take it slow...",
-                        style = MaterialTheme.typography.bodyMedium
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.padding(16.dp)
                     )
                 }
                 Spacer(Modifier.height(25.dp))
