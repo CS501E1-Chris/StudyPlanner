@@ -25,6 +25,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -66,7 +67,9 @@ fun FocusPlanRoute(
     var subject by rememberSaveable {mutableStateOf("")}
     var minutesInput by rememberSaveable {mutableStateOf("")}
     //making focus plan nullable type
-    var plan by rememberSaveable {mutableStateOf<FocusPlan?>(null)}
+    //not saveable so the plan does not persist screen rotations
+    //also tried with saveable but app kept crashing
+    var plan by remember {mutableStateOf<FocusPlan?>(null)}
 
     val minutes = minutesInput.toIntOrNull()
     val canCreatePlan =
