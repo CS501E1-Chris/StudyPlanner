@@ -1,5 +1,6 @@
 package com.chris.studyplanner
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -7,11 +8,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -144,7 +147,10 @@ fun FocusPlanScreen(
                 value = subject,
                 onValueChange = onSubjectChange,
                 label = {Text("Subject")},
-                modifier = Modifier,
+                textStyle = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier
+                    .width(250.dp)
+                    .align(Alignment.CenterHorizontally),
             )
 
             Spacer(Modifier.height(16.dp))
@@ -153,7 +159,10 @@ fun FocusPlanScreen(
                 value = minutesInput,
                 onValueChange = onMinutesChange,
                 label = {Text("Duration")},
-                modifier = Modifier,
+                textStyle = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier
+                    .width(250.dp)
+                    .align(Alignment.CenterHorizontally)
             )
 
             Spacer(Modifier.height(25.dp))
@@ -165,8 +174,13 @@ fun FocusPlanScreen(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
             )
                 {
-                    Text ("Create Plan")
+                    Text (
+                        text = "Create Plan",
+                        style = MaterialTheme.typography.bodySmall
+                    )
                 }
+
+            Spacer(Modifier.height(25.dp))
 
         }
 
@@ -186,38 +200,57 @@ fun FocusPlanScreen(
                 //subject, duration, category, break
                 Text(
                     text = "Your Study Plan",
+                    style = MaterialTheme.typography.bodyMedium
                 )
+
+                Spacer(Modifier.height(5.dp))
+
                 Text(
                     text = plan.subject,
                     style = MaterialTheme.typography.bodyLarge)
 
-                Card()
+                Spacer(Modifier.height(15.dp))
+
+                OutlinedCard()
                 {
                     Text(
                         text = "Duration: ${plan.minutes}",
+                        style = MaterialTheme.typography.bodySmall
                     )
                 }
-                Card()
+
+                Spacer(Modifier.height(10.dp))
+
+                OutlinedCard()
                 {
                     Text(
                         text = "Category: ${plan.category}",
+                        style = MaterialTheme.typography.bodySmall
+
                     )
                 }
+
                 Spacer(Modifier.height(16.dp))
 
                 Text("Recommended Break")
                 Text(
                     text = "${plan.breakMinutes} minutes after session",
-                    style = MaterialTheme.typography.bodyLarge
+                    style = MaterialTheme.typography.bodySmall
                 )
                 Spacer(Modifier.height(25.dp))
 
-                Card()
+                OutlinedCard(
+                    modifier = Modifier.fillMaxWidth(0.9f)
+                        .align(Alignment.CenterHorizontally),
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
+                )
                 {
                     Text(
                     text = "Study ${plan.subject} for ${plan.minutes} minutes, then take a ${plan.breakMinutes} minute break! Take it slow...",
+                        style = MaterialTheme.typography.bodyMedium
                     )
                 }
+                Spacer(Modifier.height(25.dp))
             }
         }
 
