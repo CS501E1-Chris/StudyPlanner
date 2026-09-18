@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">Focus</string>
     <string name="app_desc">All you have to do is enter the desired subject of study and time duration and let Focus build a plan for you</string>
+    <string name="break_text">RECOMMENDED BREAK</string>
+    <string name="break_after_session">%1$d minutes after session</string>
+    <string name="plan_summary">Study %1$s for %2$d minutes, then take a %3$d minute break! Take it slow…</string>
+    <string name="category_label">Category: %1$s</string>
+    <string name="duration_label">Duration: %1$d minutes</string>
+    <string name="study_plan_title">"Your Study Plan"</string>
+
 </resources>

@@ -33,6 +33,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.chris.studyplanner.ui.theme.DarkSurface
 import com.chris.studyplanner.ui.theme.OutlineCoral
 
@@ -132,7 +133,10 @@ fun FocusPlanScreen(
             text = stringResource(R.string.app_name),
             style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            fontSize = 40.sp,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Spacer(Modifier.height(16.dp))
         Text(
@@ -226,7 +230,7 @@ fun FocusPlanScreen(
 
                 //subject, duration, category, break
                 Text(
-                    text = "Your Study Plan",
+                    text = stringResource(R.string.study_plan_title),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -245,7 +249,7 @@ fun FocusPlanScreen(
                 )
                 {
                     Text(
-                        text = "Duration: ${plan.minutes} minutes",
+                        text = stringResource(R.string.duration_label),
                         style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier.padding(16.dp)
                     )
@@ -259,7 +263,7 @@ fun FocusPlanScreen(
                 )
                 {
                     Text(
-                        text = "Category: ${plan.category}",
+                        text = stringResource(R.string.category_label),
                         style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier.padding(16.dp)
                     )
@@ -274,11 +278,11 @@ fun FocusPlanScreen(
                 Spacer(Modifier.height(15.dp))
 
                 Text(
-                    text = "RECOMMENDED BREAK",
+                    text = stringResource(R.string.break_text),
                     style = MaterialTheme.typography.bodySmall
                 )
                 Text(
-                    text = "${plan.breakMinutes} minutes after session",
+                    text = stringResource(R.string.break_after_session),
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Bold
                 )
@@ -294,7 +298,7 @@ fun FocusPlanScreen(
                 )
                 {
                     Text(
-                    text = "Study ${plan.subject} for ${plan.minutes} minutes, then take a ${plan.breakMinutes} minute break! Take it slow...",
+                    text = stringResource(R.string.plan_summary),
                         style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier.padding(16.dp)
                     )
