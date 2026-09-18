@@ -17,7 +17,7 @@ sentence describing the plan.
 
 1. Clone this repository:
    ```
-   git clone [your repo URL here]
+   git clone https://github.com/CS501E1-Chris/StudyPlanner.git
    ```
 2. Open the project in Android Studio.
 3. Let Gradle sync automatically finish.
