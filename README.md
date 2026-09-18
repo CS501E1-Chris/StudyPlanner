@@ -24,12 +24,9 @@ sentence describing the plan.
 4. Run the app on an emulator or physical device running Android 24+.
 5. Enter a subject (e.g. "Kotlin") and a duration between 10 and 180 minutes, then tap **Create plan** to generate a study plan.
 
-## Screenshot
+## Screenshot & Questions
 
-![Focus_ss](screenshot.png)
-
-*(Replace `screenshot.png` above with your actual screenshot file, placed in the repo root
-or an `images/` folder, and update the path accordingly.)*
+![View Report](./StudyPlanner_Assignment2.pdf)
 
 ## State and Recomposition
 
