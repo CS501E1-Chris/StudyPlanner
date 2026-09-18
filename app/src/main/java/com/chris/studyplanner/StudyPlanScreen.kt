@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,15 +22,21 @@ import androidx.compose.ui.unit.dp
 
 fun durationCategory(minutes: Int): String{
 
-
-    return TODO("Provide the return value")
+    return when {
+        minutes < 10 -> "Invalid"
+        minutes in 10..29 -> "Quick Review"
+        minutes in 30..60 -> "Focussed Session"
+        else -> "Extended session"
+    }
 }
 
 fun recommendedBreak(minutes: Int): Int{
-    return 0
+    return when {
+        minutes in 10..29 -> 5
+        minutes in 30..60 -> 10
+        else -> 15
+    }
 }
-
-
 
 @Composable
 fun FocusPlanRoute(
@@ -115,5 +122,11 @@ fun FocusPlanScreen(
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth()
         )
+
+        Card()
+        {
+
+
+        }
     }
 }
