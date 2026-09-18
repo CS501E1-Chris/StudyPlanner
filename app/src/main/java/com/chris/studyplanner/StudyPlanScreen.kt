@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -28,9 +29,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -39,6 +40,7 @@ import com.chris.studyplanner.ui.theme.OutlineCoral
 
 fun durationCategory(minutes: Int): String{
 
+    //calculating category according to minute input
     return when {
         minutes < 10 -> "Invalid"
         minutes in 10..29 -> "Quick Review"
@@ -48,9 +50,10 @@ fun durationCategory(minutes: Int): String{
 }
 
 fun recommendedBreak(minutes: Int): Int{
-    return when {
-        minutes in 10..29 -> 5
-        minutes in 30..60 -> 10
+    //calculating break according to the input minutes duration
+    return when (minutes) {
+        in 10..29 -> 5
+        in 30..60 -> 10
         else -> 15
     }
 }
@@ -68,17 +71,33 @@ fun FocusPlanRoute(
     val minutes = minutesInput.toIntOrNull()
     val canCreatePlan =
         subject.isNotBlank() &&
+                !subject.all { it.isDigit() } &&
+                subject.length <= 30 &&
                 minutes != null &&
                 minutes in 10..180
 
-//    if(canCreatePlan)
-//    {
-//        FocusPlan
-//
-//    }
+    //adding a validation check if user enters input < 5 and > 180 or blank input
+    val isMinutesError = minutesInput.isNotEmpty() && (minutes == null || minutes !in 10..180)
+
+    //adding a validation check if user enters subject input as just integers and/or too long
+    val isSubjectError = subject.isNotEmpty() && (
+            subject.isBlank() ||
+                    subject.all { it.isDigit() } || subject.length > 30
+            )
+
+    //corresponding error message
+    val subjectErrorMessage = when {
+        subject.isBlank() -> "Subject cannot be blank"
+        subject.all { it.isDigit() } -> "Subject cannot be only numbers"
+        subject.length > 30 -> "Subject is too long (max 30 characters)"
+        else -> ""
+    }
 
     FocusPlanScreen(subject,
+        isSubjectError,
+        subjectErrorMessage,
         minutesInput,
+        isMinutesError,
         plan,
         //callback parameters to enable state hoisting
         onSubjectChange = { Val ->
@@ -91,16 +110,13 @@ fun FocusPlanRoute(
         },
         canCreatePlan,
         onCreatePlan = {
-            //check if create plan is valid
-            if (canCreatePlan)
-            {
-             //create a new plan
-             plan = FocusPlan(
-                 subject = subject.trim(),
-                 minutes = minutes,
-                 category = durationCategory(minutes),
-                 breakMinutes = recommendedBreak(minutes)
-             )
+            if (canCreatePlan) {
+                plan = FocusPlan(
+                    subject = subject.trim(),
+                    minutes = minutes,
+                    category = durationCategory(minutes),
+                    breakMinutes = recommendedBreak(minutes)
+                )
             }
         },
         modifier
@@ -110,7 +126,11 @@ fun FocusPlanRoute(
 @Composable
 fun FocusPlanScreen(
     subject: String,
+    isSubjectError : Boolean,
+    subjectErrorMessage: String,
     minutesInput: String,
+    //adding isMinutesError for input validation
+    isMinutesError: Boolean,
     plan: FocusPlan?,
     onSubjectChange: (String) -> Unit,
     onMinutesChange: (String) -> Unit,
@@ -165,6 +185,16 @@ fun FocusPlanScreen(
                     cursorColor = MaterialTheme.colorScheme.primary
                 ),
                 textStyle = MaterialTheme.typography.bodyMedium,
+                isError = isSubjectError,
+                supportingText = {
+                    if (isSubjectError) {
+                        Text(
+                            text = subjectErrorMessage,
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
+                },
+//                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier
                     .width(250.dp)
                     .align(Alignment.CenterHorizontally),
@@ -182,6 +212,16 @@ fun FocusPlanScreen(
                     cursorColor = MaterialTheme.colorScheme.primary
                 ),
                 textStyle = MaterialTheme.typography.bodyMedium,
+                isError = isMinutesError,
+                supportingText = {
+                    if (isMinutesError) {
+                        Text(
+                            text = "Invalid input, must be within the range of 10 - 180",
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
+                },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier
                     .width(250.dp)
                     .align(Alignment.CenterHorizontally)
@@ -210,7 +250,6 @@ fun FocusPlanScreen(
                 }
 
             Spacer(Modifier.height(25.dp))
-
         }
 
         Spacer(Modifier.height(50.dp))
@@ -249,7 +288,7 @@ fun FocusPlanScreen(
                 )
                 {
                     Text(
-                        text = stringResource(R.string.duration_label),
+                        text = stringResource(R.string.duration_label, plan.minutes),
                         style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier.padding(16.dp)
                     )
@@ -263,7 +302,7 @@ fun FocusPlanScreen(
                 )
                 {
                     Text(
-                        text = stringResource(R.string.category_label),
+                        text = stringResource(R.string.category_label, plan.category),
                         style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier.padding(16.dp)
                     )
@@ -282,7 +321,7 @@ fun FocusPlanScreen(
                     style = MaterialTheme.typography.bodySmall
                 )
                 Text(
-                    text = stringResource(R.string.break_after_session),
+                    text = stringResource(R.string.break_after_session, plan.breakMinutes),
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Bold
                 )
@@ -298,7 +337,7 @@ fun FocusPlanScreen(
                 )
                 {
                     Text(
-                    text = stringResource(R.string.plan_summary),
+                    text = stringResource(R.string.plan_summary, plan.subject, plan.minutes, plan.breakMinutes),
                         style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier.padding(16.dp)
                     )
@@ -306,6 +345,5 @@ fun FocusPlanScreen(
                 Spacer(Modifier.height(25.dp))
             }
         }
-
     }
 }
