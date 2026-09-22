@@ -31,10 +31,12 @@ sentence describing the plan.
 ## State and Recomposition
 
 'FocusPlanRoute' owns the screen’s state: subject, minutesText, and plan. The text fields use rememberSaveable so that the state i.e the values persist in cases of activity changes such as screen rotation, etc.
-Since text fields use String, minutesText.toIntOrNull() is used to safely convert the input to a number.
-'canCreatePlan' and the error states are derived from the current input, so they do not need to be stored separately. When the user types, the state changes and Compose triggers recomposition. 
-During recomposition, the derived values are recalculated and the updated values are passed to FocusPlanScreen, so the button and error messages update automatically. 
-FocusPlanScreen does not manage the state itself; it receives the values and sends changes back through callbacks.
+
+'canCreatePlan' and the error states are derived from the current input, so they do not need to be stored separately. When the user types, the state changes and Compose triggers recomposition.
+
+During recomposition, the derived values are recalculated and the updated values are passed to FocusPlanScreen, so the button and error messages update automatically.
+
+FocusPlanScreen does not manage the state; it receives the values and sends changes back through callbacks.
 
 ## Generative AI Assistance
 
@@ -45,7 +47,5 @@ FocusPlanScreen does not manage the state itself; it receives the values and sen
   format arguments, helped in suggestions for input validations.
   Asked AI to generate Color.kt and Theme.kt according to the theme that I generated on Figma.
 - **What portions I changed or verified:** I wrote the initial validation logic myself and had it reviewed
-- **How I confirmed I understand the submitted code:** I traced through the
-  recomposition flow manually for each state change, tested all 11 cases from the assignment
-  spec, and can explain every function and composable in this file without referring to
-  notes
+- **How I confirmed I understand the submitted code:** tested all 11 cases from the assignment
+  spec, and can explain the functions and composables in this file
